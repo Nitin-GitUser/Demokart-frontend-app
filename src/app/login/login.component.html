@@ -1,0 +1,54 @@
+<body style="background-color: #007bff;">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+                <div class="card card-signin my-5">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">Welcome Back!!</h5>
+                        <form class="form-signin" (ngSubmit)="verifyDetails(userForm)" #userForm="ngForm">
+                            <div class="form-label-group">
+                                <input type="email" id="inputEmail" [(ngModel)]="user.email" name="email"
+                                    class="form-control" placeholder="Email address" required autofocus
+                                    #emailVar="ngModel" email="true" [ngClass]="{
+                                        'is-invalid': (emailVar.touched || emailVar.dirty) && !emailVar.valid
+                                      }">
+                                <span class="invalid-feedback">
+                                    <span *ngIf="emailVar.errors?.required">
+                                        Please enter your email.
+                                    </span>
+                                    <span *ngIf="emailVar.errors?.email">
+                                        Please enter a valid email.
+                                    </span>
+                                </span>
+                                <label for="inputEmail">Email address</label>
+                            </div>
+
+                            <div class="form-label-group">
+                                <input type="password" [(ngModel)]="user.password" id="inputPassword" name="password"
+                                    class="form-control" placeholder="Password" required minlength="8"
+                                    #passVar="ngModel" [ngClass]="{
+                                        'is-invalid': (passVar.touched || passVar.dirty) && !passVar.valid
+                                      }">
+                                <span class="invalid-feedback">
+                                    <span *ngIf="passVar.errors?.required">
+                                        Please enter your password.
+                                    </span>
+                                    <span *ngIf="passVar.errors?.minlength">
+                                        Please enter atleast 8 characters.
+                                    </span>
+                                </span>
+                                <label for="inputPassword">Password</label>
+                            </div>
+                            <button class="btn btn-lg btn-primary btn-block text-uppercase" [disabled]="!userForm.valid"
+                                type="submit">Sign
+                                in</button>
+                            <hr class="my-4">
+                            <p>{{ message }}</p>
+                        </form>
+                        <p [hidden]="!verifyDetails"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

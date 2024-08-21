@@ -1,0 +1,14 @@
+.head {
+    justify-content: space-between;
+}
+
+.cartno {
+        position: absolute;
+        top: -8px;
+        right: 14px;
+        FONT-SIZE: 12px;
+    }
+
+.cart {
+    position: relative;
+}

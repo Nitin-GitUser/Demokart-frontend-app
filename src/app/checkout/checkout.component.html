@@ -1,0 +1,156 @@
+<body class="bg-light">
+    <div class="container">
+        <div class="py-5 text-center">
+            <img class="d-block mx-auto mb-4" src="../../assets/images/Nagarro.png" alt="" width="72" height="72">
+            <h2>Delivery Details</h2>
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-8 order-md-1" [hidden]="checkoutValidation">
+                <h4 class="mb-3">Billing address</h4>
+                <form class="checkoutForm" (ngSubmit)="onSubmit(checkoutForm)" #checkoutForm="ngForm">
+                    <div class="row form-label-group">
+                        <div class="col-md-6 mb-3">
+                            <label for="firstName">First name</label>
+                            <input type="text" class="form-control" id="firstName" name="firstName" required autofocus
+                                [(ngModel)]="checkoutForm.firstName" #firstNameVar="ngModel" [ngClass]="{
+                                'is-invalid': (firstNameVar.touched || firstNameVar.dirty) && !firstNameVar.valid
+                              }">
+                            <span class="invalid-feedback">
+                                <span *ngIf="firstNameVar.errors?.required">
+                                    Valid first name is required.
+                                </span>
+                            </span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="lastName">Last name</label>
+                            <input type="text" class="form-control" id="lastName" name="lastName" required
+                                [(ngModel)]="checkoutForm.lastName" #lastNameVar="ngModel" [ngClass]="{
+                            'is-invalid': (lastNameVar.touched || lastNameVar.dirty) && !lastNameVar.valid
+                          }">
+                            <span class="invalid-feedback">
+                                <span *ngIf="lastNameVar.errors?.required">
+                                    Valid last name is required.
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email">Email <span class="text-muted">(Optional)</span></label>
+                        <input type="email" class="form-control" id="email" name="email" required email="true"
+                            [(ngModel)]="checkoutForm.email" #emailVar="ngModel" [ngClass]="{
+                                'is-invalid': (emailVar.touched || emailVar.dirty) && !emailVar.valid
+                              }">
+                        <span class="invalid-feedback">
+                            <span *ngIf="emailVar.errors?.required">
+                                Please enter a valid email address for shipping updates.
+                            </span>
+                            <span *ngIf="emailVar.errors?.email">
+                                Please enter a valid email.
+                            </span>
+                        </span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="address">Address</label>
+                        <input type="text" class="form-control" id="address" name="address" required
+                            [(ngModel)]="checkoutForm.address" #addressVar="ngModel" [ngClass]="{
+                            'is-invalid': (addressVar.touched || addressVar.dirty) && !addressVar.valid
+                          }">
+                        <span class="invalid-feedback">
+                            <span *ngIf="addressVar.errors?.required">
+                                Please enter your shipping address
+                            </span>
+                        </span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="phone">Contact</label>
+                        <input type="tel" class="form-control" id="phone" name="phone" minlength="10" maxLength="10"
+                            required pattern="[1-9]{1}[0-9]{9}" [(ngModel)]="checkoutForm.phone" #phoneVar="ngModel"
+                            [ngClass]="{
+                            'is-invalid': (phoneVar.touched || phoneVar.dirty) && !phoneVar.valid
+                          }">
+                        <span class="invalid-feedback">
+                            <span *ngIf="phoneVar.errors?.required">
+                                Please provide number
+                            </span>
+                            <span *ngIf="phoneVar.errors?.minlength && phoneVar.errors?.pattern">
+                                Please enter valid number
+                            </span>
+                        </span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-5 mb-3">
+                            <label for="country">Country</label>
+                            <select class="custom-select d-block w-100" id="country" name="country" required
+                                [(ngModel)]="checkoutForm.country" #countryVar="ngModel" [ngClass]="{
+                            'is-invalid': (countryVar.touched || countryVar.dirty) && !countryVar.valid
+                          }">
+                                <option value="">Choose...</option>
+                                <option>India</option>
+                            </select>
+                            <div class="invalid-feedback" *ngIf="countryVar.errors?.required">
+                                Please select a valid country.
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="state">State</label>
+                            <select class="custom-select d-block w-100" id="state" name="state" required
+                            [(ngModel)]="checkoutForm.state" #stateVar="ngModel" [ngClass]="{
+                                'is-invalid': (stateVar.touched || stateVar.dirty) && !stateVar.valid
+                              }">
+                                <option value="">Choose...</option>
+                                <option>Punjab</option>
+                                <option>Haryana</option>
+                                <option>Rajasthan</option>
+                            </select>
+                            <div class="invalid-feedback" *ngIf="stateVar.errors?.required">
+                                Please provide a valid state.
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="zip">Zip</label>
+                            <input type="tel" class="form-control" id="zip" name=zip minlength="6" maxlength="6" required
+                            pattern="[1-9]{1}[0-9]{5}" [(ngModel)]="checkoutForm.zip" #zipVar="ngModel"
+                            [ngClass]="{
+                            'is-invalid': (zipVar.touched || zipVar.dirty) && !zipVar.valid
+                          }">
+                            <div class="invalid-feedback">
+                                <span *ngIf="zipVar.errors?.required">
+                                    Zip code required.
+                                </span>
+                                <span *ngIf="zipVar.errors?.minlength && zipVar.errors?.pattern">
+                                    Please enter valid zip code.
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="mb-4">
+                    <button class="btn btn-primary btn-lg btn-block" type="submit" [disabled]="!checkoutForm.valid">Place Order</button>
+                </form>
+            </div>
+            <div class="text-center" [hidden]="!checkoutValidation" >
+                <h3>Thank You!! Your Order Placed successfully</h3>
+            </div>
+            <div *ngIf="error" style="color: red;">
+                {{ error }}
+            </div>
+            <div *ngIf="data" style="color: blue;">
+                {{ data | json}}
+            </div>            
+        </div>
+
+        <footer class="my-5 pt-5 text-muted text-center text-small">
+            <p class="mb-1">© 2021 nagp2021.workshop</p>
+            <ul class="list-inline">
+                <li class="list-inline-item"><a href="#">Privacy</a></li>
+                <li class="list-inline-item"><a href="#">Terms</a></li>
+                <li class="list-inline-item"><a href="#">Support</a></li>
+            </ul>
+        </footer>
+    </div>
+</body>

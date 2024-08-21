@@ -1,0 +1,123 @@
+[
+    {
+        "id": 1,
+        "name": "Lord Ganesh",
+        "price": 1000,
+        "painter": "Nitin Goyal",
+        "description": "Beautiful load ganesha painting",
+        "category": "Texture",
+        "quantity": 51,
+        "tag": "Retail",
+        "image": "ganesh.jpg"
+    },
+    {
+        "id": 2,
+        "name": "Sky View",
+        "price": 500,
+        "painter": "Vincent Van Gogh",
+        "description": "Natural blue sky digital painting",
+        "category": "Digital",
+        "quantity": 10,
+        "tag": "Retail",
+        "image": "digital.jpg"
+    },
+    {
+        "id": 3,
+        "name": "Leonardo Art",
+        "price": 5000,
+        "painter": "Leonardo da Vinci",
+        "description": "Natural painting by Leonardo da vinci",
+        "category": "Texture",
+        "quantity": 15,
+        "tag": "Retail",
+        "image": "Leonardo.jpg"
+    },
+    {
+        "id": 4,
+        "name": "Monalisa by Leonardo",
+        "price": 15000,
+        "painter": "Leonardo da Vinci",
+        "description": "Monalisa painting by Leonardo da vinci",
+        "category": "Texture",
+        "quantity": 20,
+        "tag": "Retail",
+        "image": "monalisa.jpg"
+    },
+    {
+        "id": 5,
+        "name": "Sunflowers",
+        "price": 1000,
+        "painter": "Vincent Van Gogh",
+        "description": "Bouquets of sunflowers in a vase",
+        "category": "Texture",
+        "quantity": 51,
+        "tag": "Retail",
+        "image": "Sunflowers.jpg"
+    },
+    {
+        "id": 6,
+        "name": "The Crucifixion",
+        "price": 500,
+        "painter": "Andrea Mantegna",
+        "description": "Panel in the central part of the predella",
+        "category": "Digital",
+        "quantity": 10,
+        "tag": "Retail",
+        "image": "Crucifixion.jpg"
+    },
+    {
+        "id": 7,
+        "name": "The Shrimp Girl",
+        "price": 5000,
+        "painter": "William Hogarth",
+        "description": "Woman selling fish on the streets",
+        "category": "Texture",
+        "quantity": 15,
+        "tag": "Retail",
+        "image": "Shrimp.jpg"
+    },
+    {
+        "id": 8,
+        "name": "Vertumnus",
+        "price": 15000,
+        "painter": "Vincent Van Gogh",
+        "description": "Portrait of the Holy Roman Emperor Rudolf",
+        "category": "Texture",
+        "quantity": 20,
+        "tag": "Retail",
+        "image": "Vertumnus.jpg"
+    },
+    {
+        "id": 9,
+        "name": "Self-Portrait in front of the Easel",
+        "price": 1000,
+        "painter": "Vincent Van Gogh",
+        "description": " Location Paris, in late February 1888",
+        "category": "Texture",
+        "quantity": 51,
+        "tag": "Retail",
+        "image": "Self-Portrait.jpg"
+    },
+    {
+        "id": 10,
+        "name": "Mr and Mrs Andrews",
+        "price": 500,
+        "painter": "Thomas Gainsborough",
+        "description": "Oil on canvas portrait of about 1750",
+        "category": "Digital",
+        "quantity": 10,
+        "tag": "Retail",
+        "image": "Andrews.jpg"
+    },
+    {
+        "id": 11,
+        "name": "St. Michael",
+        "price": 5000,
+        "painter": "Raphael (Raffaello Sanzio)",
+        "description": "Oil painting by Italian artist Raphael.",
+        "category": "Texture",
+        "quantity": 15,
+        "tag": "Retail",
+        "image": "Michael.jpg"
+    }
+]

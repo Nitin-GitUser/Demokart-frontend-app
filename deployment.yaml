@@ -1,0 +1,184 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Infrastructure setup for Angular app with EC2, ALB, and ASG
+
+Parameters:
+  InstanceType:
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+      - t2.micro
+      - t2.small
+      - t2.medium
+    Description: EC2 instance type
+
+  S3Path:
+    Type: String
+    Description: s3 path to be used in UserData for code deployment
+
+  KeyName:
+    Type: String
+    Default: nitin
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the instances
+
+Resources:
+  # Security Group
+  InstanceSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow HTTP and SSH access
+      VpcId: !ImportValue OrderServiceStack-VpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+
+  # IAM Role
+  EC2InstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: EC2InstanceRole
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: S3ReadWriteAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:PutObject
+                  - s3:ListBucket
+                Resource:
+                  - !Sub arn:aws:s3:::nitin-frontend-app-bucket
+                  - !Sub arn:aws:s3:::nitin-frontend-app-bucket/*
+  
+  # IAM Instance Profile
+  EC2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      InstanceProfileName: EC2InstanceProfile
+      Roles:
+        - !Ref EC2InstanceRole
+
+  # Launch Template
+  LaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateName: angular-app-launch-template
+      VersionDescription: "Initial version"
+      LaunchTemplateData:
+        InstanceType: !Ref InstanceType
+        ImageId: ami-066784287e358dad1  # Replace with your preferred AMI ID
+        KeyName: !Ref KeyName
+        SecurityGroupIds:
+          - !GetAtt InstanceSG.GroupId
+        IamInstanceProfile:
+          Name: !Ref EC2InstanceProfile
+        UserData:
+          Fn::Base64: !Sub |
+            #!/bin/bash
+            yum update -y
+            yum install -y aws-cfn-bootstrap
+            yum install -y nginx
+            systemctl start nginx
+            systemctl enable nginx
+            # Clear the default Nginx HTML
+            rm -rf /usr/share/nginx/html/*
+            # Download the Angular app (uncomment and update the S3 path as needed)
+            aws s3 cp s3://${S3Path} /tmp/angular-app.zip
+            # Unzip the Angular app
+            cd /tmp
+            unzip angular-app.zip -d /usr/share/nginx/html
+            # Clean up
+            rm /tmp/angular-app.zip
+            echo "Hello from EC2 instance!" > /usr/share/nginx/html/index.html
+            # Signal to CloudFormation that the instance is ready
+            /opt/aws/bin/cfn-signal -e $? \
+              --stack ${AWS::StackName} \
+              --resource AutoScalingGroup \
+              --region ${AWS::Region} \
+
+  # Auto Scaling Group
+  AutoScalingGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      LaunchTemplate:
+        LaunchTemplateId: !Ref LaunchTemplate
+        Version: !GetAtt LaunchTemplate.LatestVersionNumber
+      MinSize: '2'
+      MaxSize: '5'
+      DesiredCapacity: '2'
+      VPCZoneIdentifier:
+        - !ImportValue OrderServiceStack-PublicSubnetId1
+        - !ImportValue OrderServiceStack-PublicSubnetId2
+      TargetGroupARNs:
+        - !Ref TargetGroup
+      Tags:
+        - Key: Name
+          Value: AngularAppInstance
+          PropagateAtLaunch: true
+    UpdatePolicy:
+      AutoScalingRollingUpdate:
+        MinInstancesInService: 1
+        MaxBatchSize: 2
+        PauseTime: PT5M
+        WaitOnResourceSignals: true
+
+  # Application Load Balancer
+  LoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Name: angular-app-alb
+      Subnets:
+        - !ImportValue OrderServiceStack-PublicSubnetId1
+        - !ImportValue OrderServiceStack-PublicSubnetId2
+      SecurityGroups:
+        - !Ref InstanceSG
+      Scheme: internet-facing
+      LoadBalancerAttributes:
+        - Key: idle_timeout.timeout_seconds
+          Value: '60'
+
+  # Target Group
+  TargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: angular-app-target-group
+      Port: 80
+      Protocol: HTTP
+      VpcId: !ImportValue OrderServiceStack-VpcId
+      HealthCheckIntervalSeconds: 5
+      HealthCheckProtocol: HTTP
+      HealthCheckPath: /index.html
+      HealthCheckTimeoutSeconds: 4
+      HealthyThresholdCount: 2
+      UnhealthyThresholdCount: 3
+
+  # ALB Listener
+  ALBListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+        - Type: forward
+          ForwardConfig:
+            TargetGroups:
+              - TargetGroupArn: !Ref TargetGroup
+      LoadBalancerArn: !Ref LoadBalancer
+      Port: 80
+      Protocol: HTTP
+
+Outputs:
+  LoadBalancerDNSName:
+    Description: "DNS Name of the Load Balancer"
+    Value: !GetAtt LoadBalancer.DNSName

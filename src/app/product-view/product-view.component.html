@@ -1,0 +1,39 @@
+<div class="d-flex flex-row mb-3"><img (click)=redirectDetails(product.id) style="cursor: pointer;" src='../../assets/images/{{product.image}}' width="160px" height="160px">
+    <div class="d-flex flex-column ml-3">
+        <span>{{product.name}}</span>
+        <span
+        class="text-black-50">Type: {{product.category}}
+        </span>
+        <hr>
+        <span class="text-black-50" style="font-size: 12px;">
+            Art of: {{product.painter}}
+        </span>
+    </div>
+</div>
+<h6>{{ product.description }}</h6>
+<div class="d-flex justify-content-between install mt-3">
+    <span>
+        Price: ₹ {{product.price}}
+    </span>
+    <span class="text-primary"><a (click)=redirectDetails(product.id) [hidden]="describe" style="background-color: white; cursor: pointer;">View</a>&nbsp;<i
+            class="fa fa-angle-right"></i>
+    </span>
+</div>
+<div [hidden]="!describe">
+    <span>
+        Tags: {{product.tag}}
+    </span>
+</div>
+<div [hidden]="!describe">
+    <span>
+        category: {{product.category}}
+    </span>
+</div>
+<div [hidden]="!describe">
+    <span>
+        Quantity Available: {{product.quantity}}
+    </span>
+</div>
+<div class="d-flex justify-content-between install mt-3">
+    <button (click)=redirectCart(product) class="btn btn-lg btn-primary btn-block" [hidden]="!describe" >Add to Cart</button>
+</div>
