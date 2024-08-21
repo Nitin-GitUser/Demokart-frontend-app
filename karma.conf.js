@@ -25,7 +25,7 @@ module.exports = function (config) {
       suppressAll: true // removes the duplicated traces
     },
     coverageReporter: {
-      dir: require('path').join(__dirname, './coverage/nagp-angular-assignment'),
+      dir: require('path').join(__dirname, './coverage/demokart-frontend-app'),
       subdir: '.',
       reporters: [
         { type: 'html' },

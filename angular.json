@@ -6,7 +6,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "nagp-angular-assignment": {
+    "demokart-frontend-app": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -16,7 +16,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/nagp-angular-assignment",
+            "outputPath": "dist/demokart-frontend-app",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -68,18 +68,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "nagp-angular-assignment:build"
+            "browserTarget": "demokart-frontend-app:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "nagp-angular-assignment:build:production"
+              "browserTarget": "demokart-frontend-app:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "nagp-angular-assignment:build"
+            "browserTarget": "demokart-frontend-app:build"
           }
         },
         "test": {
@@ -116,16 +116,16 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "nagp-angular-assignment:serve"
+            "devServerTarget": "demokart-frontend-app:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "nagp-angular-assignment:serve:production"
+              "devServerTarget": "demokart-frontend-app:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "nagp-angular-assignment"
+  "defaultProject": "demokart-frontend-app"
 }
