@@ -26,7 +26,7 @@ pipeline {
                     
                     // Build Angular app
                     sh 'npm install'
-                    sh 'ng build --prod'
+                    sh 'ng build'
                 }
             }
         }
@@ -44,8 +44,10 @@ pipeline {
         stage('Upload to S3') {
             steps {
                 script {
-                    // Upload the packaged app to S3
-                    sh "aws s3 cp ${APP_PATH} s3://${S3_BUCKET}/${S3_PATH}/${APP_PATH} --region ${AWS_REGION}"
+                    withCredentials([aws(credentialsId: "nagarro")]) {
+                        // Upload the packaged app to S3
+                        sh "aws s3 cp ${APP_PATH} s3://${S3_BUCKET}/${S3_PATH}/${APP_PATH} --region ${AWS_REGION}"
+                    }
                 }
             }
         }
@@ -53,16 +55,18 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    // Notify the EC2 instances to deploy the new app
-                    sh """
-                    aws cloudformation deploy \
-                    --stack-name frontendAngularStack \
-                    --template-file ./deployment.yaml \
-                    --parameter-overrides S3Path=${S3_BUCKET}/${S3_PATH}/${APP_PATH}  \
-                    --capabilities CAPABILITY_NAMED_IAM  \
-                    --no-fail-on-empty-changeset \
-                    --profile nagarro --region us-east-1
-                    """
+                    withCredentials([aws(credentialsId: "nagarro")]) {
+                        // Notify the EC2 instances to deploy the new app
+                        sh """
+                        aws cloudformation deploy \
+                        --stack-name frontendAngularStack \
+                        --template-file ./deployment.yaml \
+                        --parameter-overrides S3Path=${S3_BUCKET}/${S3_PATH}/${APP_PATH}  \
+                        --capabilities CAPABILITY_NAMED_IAM  \
+                        --no-fail-on-empty-changeset \
+                        --region us-east-1
+                        """
+                    }
                 }
             }
         }
