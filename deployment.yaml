@@ -102,7 +102,7 @@ Resources:
             unzip angular-app.zip -d /usr/share/nginx/html
             # Clean up
             rm /tmp/angular-app.zip
-            echo "Hello from EC2 instance!" > /usr/share/nginx/html/index.html
+            echo "Hello from EC2 instance!" > /usr/share/nginx/html/index1.html
             # Signal to CloudFormation that the instance is ready
             /opt/aws/bin/cfn-signal -e $? \
               --stack ${AWS::StackName} \

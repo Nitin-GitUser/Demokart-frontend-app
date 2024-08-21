@@ -5,6 +5,7 @@ pipeline {
         AWS_REGION = 'us-east-1'
         S3_BUCKET = 'nitin-frontend-app-bucket'
         S3_PATH = 'demokart-app'
+        SERVICE = 'demokart-frontend-app'
     }
 
     stages {
@@ -36,7 +37,7 @@ pipeline {
                 script {
                     // Package the Angular app with the Git commit hash in the file name
                     APP_PATH = "Demokart-app-${GIT_COMMIT_HASH}.zip"
-                    sh "cd dist && zip -r ../${APP_PATH} ."
+                    sh "cd dist/${SERVICE} && zip -r ../../${APP_PATH} ."
                 }
             }
         }

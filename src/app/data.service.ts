@@ -1,6 +1,6 @@
-// src/app/data.service.ts
+// data.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -8,13 +8,12 @@ import { Observable } from 'rxjs';
 })
 export class DataService {
 
-  private apiUrl = 'http://0.0.0.0:5000/order'; // Replace with your API URL
+  private apiUrl = 'http://OrderServiceLoadBalancer-1287903968.us-east-1.elb.amazonaws.com/order'; // Replace with your API URL
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  getData(): Observable<any> {
-    const data = this.http.get<any>(this.apiUrl);
-    console.log(data)
-    return data
+  getData(orderId: string): Observable<any> {
+    const params = new HttpParams().set('orderId', orderId);
+    return this.http.get<any>(this.apiUrl, { params });
   }
 }
