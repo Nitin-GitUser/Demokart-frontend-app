@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class DataService {
 
-  private apiUrl = 'http://OrderServiceLoadBalancer-1287903968.us-east-1.elb.amazonaws.com/order'; // Replace with your API URL
+  private apiUrl = 'http://OrderServiceLoadBalancer-688205298.us-east-1.elb.amazonaws.com/order'; // Replace with your API URL
 
   constructor(private http: HttpClient) {}
 
